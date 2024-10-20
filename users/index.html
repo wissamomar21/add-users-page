@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=V, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة مستخدمين</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            height: 100vh;
+            padding: 20px; 
+        }
+
+        .container {
+            max-width: 900px; 
+            background-color: #fff;
+            padding: 30px; 
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            width: 100%; 
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 36px; 
+            font-weight: 600;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .buttons button {
+            margin-left: 10px;
+            padding: 12px 25px; 
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .buttons .add-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .buttons .edit-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .buttons .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .buttons button:hover {
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%; 
+            max-width: 900px; 
+            border-collapse: collapse;
+            margin-top: 20px; 
+            text-align: right;
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 20px; 
+        }
+
+        table th, table td {
+            padding: 15px; 
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px; 
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+        }
+
+        .hidden-details {
+            display: none;
+        }
+
+        .visible-details {
+            display: table-row;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>إضافة مستخدمين</h1> 
+        <div class="form-group">
+            <label for="name">اسم المستخدم</label>
+            <input type="text" id="name" name="name" placeholder="أدخل اسم المستخدم">
+        </div>
+
+        <div class="form-group">
+            <label for="email">البريد الإلكتروني</label>
+            <input type="email" id="email" name="email" placeholder="أدخل البريد الإلكتروني">
+        </div>
+
+        <div class="form-group">
+            <label for="phone">رقم الهاتف</label>
+            <input type="tel" id="phone" name="phone" placeholder="أدخل رقم الهاتف">
+        </div>
+
+        <div class="buttons">
+            <button class="add-btn" onclick="addMember()">إضافة</button>
+            <button class="edit-btn" onclick="editMember()">تعديل</button>
+            <button class="delete-btn" onclick="deleteMember()">حذف</button>
+        </div>
+
+        <table id="members-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>اسم المستخدم</th>
+                </tr>
+            </thead>
+            <tbody id="members-body">
+            </tbody>
+        </table>
+
+    </div>
+
+    <script>
+        let selectedRow = null;
+
+        function addMember() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            if (name === '' || email === '' || phone === '') {
+                alert('الرجاء إدخال جميع البيانات.');
+                return;
+            }
+
+            const table = document.getElementById('members-body');
+            const newRow = table.insertRow(table.rows.length);
+            const nameCell = newRow.insertCell(0);
+            nameCell.innerHTML = table.rows.length;
+            const basicCell = newRow.insertCell(1);
+            basicCell.innerHTML = name;
+            basicCell.style.cursor = 'pointer';
+            const detailRow = table.insertRow(table.rows.length);
+            const detailCell = detailRow.insertCell(0);
+            detailCell.colSpan = 2;
+            detailCell.className = 'hidden-details';
+            detailCell.innerHTML = <strong>البريد الإلكتروني:</strong> ${email}<br><strong>رقم الهاتف:</strong> ${phone};
+
+            basicCell.addEventListener('click', function() {
+                if (detailCell.classList.contains('hidden-details')) {
+                    detailCell.classList.remove('hidden-details');
+                    detailCell.classList.add('visible-details');
+                } else {
+                    detailCell.classList.add('hidden-details');
+                    detailCell.classList.remove('visible-details');
+                }
+            });
+
+            clearForm();
+        }
+
+        function editMember() {
+            if (selectedRow === null) {
+                alert('الرجاء اختيار مستخدم لتعديله.');
+                return;
+            }
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            if (name === '' || email === '' || phone === '') {
+                alert('الرجاء إدخال جميع البيانات.');
+                return;
+            }
+
+            selectedRow.cells[1].innerHTML = name;
+            selectedRow.nextSibling.cells[0].innerHTML = <strong>البريد الإلكتروني:</strong> ${email}<br><strong>رقم الهاتف:</strong> ${phone};
+
+            clearForm();
+            selectedRow = null;
+        }
+
+        function deleteMember() {
+            if (selectedRow === null) {
+                alert('الرجاء اختيار مستخدم لحذفه.');
+                return;
+            }
+
+            selectedRow.remove();
+            selectedRow.nextSibling.remove(); 
+            clearForm();
+            selectedRow = null;
+        }
+
+        function selectRow(row) {
+            selectedRow = row;
+
+            document.getElementById('name').value = row.cells[1].innerHTML;
+            const details = row.nextSibling.cells[0].innerHTML.split('<br>');
+            document.getElementById('email').value = details[0].split(': ')[1];
+            document.getElementById('phone').value = details[1].split(': ')[1];
+        }
+
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+        }
+    </script>
+
+</body>
+</html>
+
+</body>
+</html>
